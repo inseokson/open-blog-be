@@ -1,0 +1,30 @@
+name: code-style-check
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  MODULE: src
+
+jobs:
+  code-style-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Github Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9.12"
+      - name: Install Libraries
+        run: pip install black==22.8.0 isort==5.10.1 flake8==5.0.4
+      - name: Check Reformat
+        run: black --check --diff ${{ env.MODULE }}
+      - name: Check Import
+        run: isort --check --diff ${{ env.MODULE }}
+      - name: Check Code style
+        run: flake8 ${{ env.MODULE }}
