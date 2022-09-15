@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  MODULE: src
+  MODULE: app
 
 jobs:
   code-style-check:
