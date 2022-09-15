@@ -10,7 +10,11 @@ class PostBase(BaseModel):
     content: str
 
 
-class Post(PostBase):
+class PostCreate(PostBase):
+    pass
+
+
+class PostInDB(PostBase):
     id: int
     timestamp: datetime
 
