@@ -8,13 +8,14 @@ from sqlalchemy.orm.session import Session
 from ... import crud
 from ...dependencies.database import get_db
 from ...schemas.post import PostCreate, PostInDB
+from fastapi_pagination import Page, paginate, Params
 
 router = APIRouter()
 
 
-@router.get("/all")
-def posts(db: Session = Depends(get_db)):
-    return crud.post.get_all(db=db)
+@router.get("", response_model=Page[PostInDB])
+async def read_posts(db: Session = Depends(get_db), params: Params = Depends()):
+    return paginate(crud.post.read_all(db=db), params)
 
 
 @router.post("", response_model=PostInDB)

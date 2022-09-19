@@ -7,3 +7,4 @@ aiofiles
 black
 isort
 flake8
+fastapi_pagination
