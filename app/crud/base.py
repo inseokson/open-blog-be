@@ -15,6 +15,9 @@ class Base(Generic[ModelType, SchemaType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
 
+    def get_all(self, db: Session):
+        return db.query(self.model).all()
+
     def _create(self, db: Session, *, request: SchemaType, **kwargs) -> ModelType:
         data = jsonable_encoder(request)
         if not kwargs:
