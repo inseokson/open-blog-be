@@ -3,12 +3,12 @@ from datetime import datetime
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi_pagination import Page, Params, paginate
 from sqlalchemy.orm.session import Session
 
 from ... import crud
 from ...dependencies.database import get_db
 from ...schemas.post import PostCreate, PostInDB
-from fastapi_pagination import Page, paginate, Params
 
 router = APIRouter()
 
