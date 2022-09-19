@@ -1,4 +1,8 @@
-from fastapi import APIRouter, Depends
+import shutil
+from datetime import datetime
+from pathlib import Path
+
+from fastapi import APIRouter, Depends, File, UploadFile
 from sqlalchemy.orm.session import Session
 
 from ... import crud
@@ -25,3 +29,14 @@ def delete(id: int, db: Session = Depends(get_db)):
     post = crud.post.delete(db=db, id=id)
 
     return post
+
+
+@router.post("/image")
+def upload_image(image: UploadFile = File(...)):
+    file_name = f"{datetime.utcnow()}_{image.filename}"
+    file_path = Path(".") / "images" / file_name
+
+    with open(file_path, "wb") as file:
+        shutil.copyfileobj(image.file, file)
+
+    return {"file_path": file_path}
