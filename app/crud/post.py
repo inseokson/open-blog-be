@@ -13,5 +13,10 @@ class CRUDPost(Base[Post, PostCreate]):
 
         return obj
 
+    def delete(self, db: Session, *, id: int):
+        obj = self._delete(db, name="Post", id=id)
+
+        return obj
+
 
 post = CRUDPost(Post)

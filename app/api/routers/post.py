@@ -18,3 +18,10 @@ def create(request: PostCreate, db: Session = Depends(get_db)):
     post = crud.post.create(db=db, request=request)
 
     return post
+
+
+@router.delete("/{id}")
+def delete(id: int, db: Session = Depends(get_db)):
+    post = crud.post.delete(db=db, id=id)
+
+    return post

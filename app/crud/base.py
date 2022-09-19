@@ -1,5 +1,6 @@
 from typing import Generic, Type, TypeVar
 
+from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.exc import SQLAlchemyError
@@ -28,6 +29,19 @@ class Base(Generic[ModelType, SchemaType]):
             db.add(obj)
             db.commit()
             db.refresh(obj)
+        except SQLAlchemyError as e:
+            db.rollback()
+            raise e
+
+        return obj
+
+    def _delete(self, db: Session, *, name: str, id: int):
+        obj = db.query(self.model).get(id)
+        if not obj:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, f"{name} with id {id} not found")
+        try:
+            db.delete(obj)
+            db.commit()
         except SQLAlchemyError as e:
             db.rollback()
             raise e
